@@ -5,6 +5,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TimeEl
 from rich.panel import Panel
 from rich.text import Text
 import sys
+import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
@@ -26,6 +27,12 @@ ASCII_ART = """
 ║╔═╗║╚═══╝║╚╗║╚═╝║║╚═╝║║║║╚╗║╚═╝║║║║╚╗
 ╚╝ ╚╝     ╚═╝╚═══╝╚═══╝╚╝╚═╝╚═══╝╚╝╚═╝
 """
+
+def clear_screen():
+    if os.name == 'nt':  # Windows
+        os.system('cls')
+    else:  # Unix/Linux/MacOS
+        os.system('clear')
 
 def validate_url(url: str) -> bool:
     try:
@@ -119,7 +126,7 @@ def crack_password(wordlist_file: str):
     found_password = None
     
     # Display banner
-    console.clear()
+    clear_screen()
     console.print(Panel(ASCII_ART, title="Password Cracker", style="bold blue"))
     
     # Get target URL and email
@@ -166,7 +173,7 @@ def crack_password(wordlist_file: str):
                     attempts_per_second = attempts / elapsed_time
                     
                     # Success animation
-                    console.clear()
+                    clear_screen()
                     console.print(ASCII_ART, style="green")
                     console.print("\n[green]Password found![/green]")
                     console.print(Panel.fit(
